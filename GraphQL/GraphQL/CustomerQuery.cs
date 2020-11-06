@@ -6,7 +6,7 @@ using GraphQL.Models;
 
 namespace GraphQL.GraphQL
 {
-    public class Query
+    public class CustomerQuery
     {
         public IQueryable<Customer> GetCustomers([Service] ApplicationDbContext context) =>
              context.Customers;
