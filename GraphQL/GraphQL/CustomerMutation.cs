@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using System;
 using GraphQL.Data;
 using GraphQL.Models;
 using HotChocolate;
@@ -8,7 +9,6 @@ namespace GraphQL.GraphQL
 {
     public class CustomerMutation
     {
-
         public async Task<CreateCustomerPayload> CreateCustomerAsync(
              CreateCustomerInput input,
              [Service] ApplicationDbContext context)
@@ -26,9 +26,19 @@ namespace GraphQL.GraphQL
 
              return new CreateCustomerPayload(customer);
          }
-    }
+             
+        public Customer DeleteCustomer(DeleteCustomerInput input, [Service] ApplicationDbContext context)
+        {
+            var customerToDelete = context.Customers.Find(input.CustomerId);
 
-    
+            if(customerToDelete == null)
+                throw new CustomerNotFoundException() { CustomerId = input.CustomerId };
+            
+             context.Customers.Remove(customerToDelete);
+             context.SaveChanges();
 
    
+            return customerToDelete;
+        }
+    }
 }
