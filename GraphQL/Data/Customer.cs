@@ -6,9 +6,11 @@ namespace GraphQL.Models
     {
         public enum Sex_enum
         {
+            None,
             Male,
             Female
         }
+        
         public int CustomerId { get; set; }
 
         [Required]

@@ -11,10 +11,23 @@ using Microsoft.EntityFrameworkCore;
 using GraphQL.Data;
 using GraphQL.GraphQL;
 using GraphQL.Models;
+using AutoMapper;
 
 
 namespace GraphQL
 {
+    public class MappingProfile : Profile {
+     public MappingProfile() {
+         // Add as many of these lines as you need to map your objects
+         CreateMap<UpdateCustomerInput, Customer>()
+            .ForMember(dest => dest.Sex, opt => opt.MapFrom((source, dest) =>  source.Sex ?? dest.Sex))
+            //.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            .ForAllMembers(opts2 => opts2.Condition((src, dest, srcMember) =>
+            {
+                return srcMember != null;
+            }));
+     }
+ }
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -29,6 +42,22 @@ namespace GraphQL
             .AddMutationType<CustomerMutation>();
 
             services.AddErrorFilter<CustomerNotFoundExceptionFilter>();
+
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
+            var executionPlan = mapperConfig.BuildExecutionPlan(typeof(UpdateCustomerInput), typeof(Customer));
+
+            mapperConfig.AssertConfigurationIsValid();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -13,5 +13,14 @@ namespace GraphQL.GraphQL
         public IQueryable<Customer> GetCustomers([Service] ApplicationDbContext context) =>
              context.Customers;
 
+         public  Customer CustomerById(int  id, [Service] ApplicationDbContext context)
+        {
+            var result =  context.Customers.FirstOrDefault<Customer>(x => x.CustomerId ==id);
+             if(result == null)
+                throw new CustomerNotFoundException() { CustomerId = id};
+
+
+            return result;
+        }
     }
 }
