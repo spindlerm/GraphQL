@@ -84,6 +84,21 @@ namespace GraphQL.GraphQL
 
              return new CreateOrderPayload(order);
          }
+    
+
+    public Order DeleteOrder(DeleteOrderInput input, [Service] ApplicationDbContext context)
+        {
+            var orderToDelete = context.Orders.Find(input.OrderId);
+
+            if(orderToDelete == null)
+                throw new OrderNotFoundException() { OrderId = input.OrderId };
+            
+             context.Orders.Remove(orderToDelete);
+             context.SaveChanges();
+
+   
+            return orderToDelete;
+        }
     }
 }
        
