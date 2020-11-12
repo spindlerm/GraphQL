@@ -8,7 +8,7 @@ using AutoMapper;
 
 namespace GraphQL.GraphQL
 {
-    public class CustomerMutation
+    public class Mutation
     {
         public async Task<CreateCustomerPayload> CreateCustomerAsync(
              CreateCustomerInput input,

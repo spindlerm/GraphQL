@@ -40,8 +40,8 @@ namespace GraphQL
             services.AddGraphQLServer()
             .AddType<Customer>()
             .AddType<Order>()
-            .AddQueryType<CustomerQuery>()
-            .AddMutationType<CustomerMutation>();
+            .AddQueryType<Query>()
+            .AddMutationType<Mutation>();
 
             services.AddErrorFilter<CustomerNotFoundExceptionFilter>();
 
