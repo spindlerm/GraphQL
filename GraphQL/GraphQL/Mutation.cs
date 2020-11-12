@@ -61,5 +61,29 @@ namespace GraphQL.GraphQL
    
             return customerToDelete;
         }
+
+        public async Task<CreateOrderPayload> CreateOrderAsync(
+             CreateOrderInput input,
+             [Service] ApplicationDbContext context)
+         {
+             var order = new Order
+             {
+                  Description = input.Description,
+                  CustomerId = input.CustomerId
+             };
+
+             context.Add(order);
+             try
+             {  
+                 await context.SaveChangesAsync();
+             }
+             catch (Exception)
+             {
+                 throw new CreateOrderException() { CustomerId = input.CustomerId };
+             }
+
+             return new CreateOrderPayload(order);
+         }
     }
 }
+       

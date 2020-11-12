@@ -44,6 +44,11 @@ namespace GraphQL
             .AddMutationType<Mutation>();
 
             services.AddErrorFilter<CustomerNotFoundExceptionFilter>();
+            services.AddErrorFilter<CreateOrderExceptionFilter>();
+            services.AddErrorFilter<OrderNotFoundExceptionFilter>();
+
+            
+            
 
             // Auto Mapper Configurations
             var mapperConfig = new MapperConfiguration(mc =>
