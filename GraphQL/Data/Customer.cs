@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace GraphQL.Models
 {
@@ -24,5 +25,8 @@ namespace GraphQL.Models
 
          [StringLength(1000)]
          public string Bio { get; set; }
+
+         public virtual ICollection<Order> Orders { get; set; }
+
     }
 }

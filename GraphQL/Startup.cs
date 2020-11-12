@@ -21,6 +21,7 @@ namespace GraphQL
          // Add as many of these lines as you need to map your objects
          CreateMap<UpdateCustomerInput, Customer>()
             .ForMember(dest => dest.Sex, opt => opt.MapFrom((source, dest) =>  source.Sex ?? dest.Sex))
+            .ForMember(dest => dest.Orders, act => act.Ignore())
             //.ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             .ForAllMembers(opts2 => opts2.Condition((src, dest, srcMember) =>
             {
@@ -38,6 +39,7 @@ namespace GraphQL
         
             services.AddGraphQLServer()
             .AddType<Customer>()
+            .AddType<Order>()
             .AddQueryType<CustomerQuery>()
             .AddMutationType<CustomerMutation>();
 

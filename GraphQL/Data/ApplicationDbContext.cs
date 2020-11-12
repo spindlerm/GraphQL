@@ -12,8 +12,18 @@ namespace GraphQL.Data
          {
          }
 
+         
+
          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+             modelBuilder.Entity<Customer>()
+                .HasMany(c => c.Orders)
+                .WithOne(e => e.Customer);
+            
+           modelBuilder.Entity<Order>()
+                .HasOne(c => c.Customer)
+                .WithMany(e => e.Orders);
         
             modelBuilder.Entity<Customer>()
                 .HasData(
@@ -33,8 +43,25 @@ namespace GraphQL.Data
                         Sex = Customer.Sex_enum.Female
                     }
         );
+
+        modelBuilder.Entity<Order>()
+                    .HasData(
+                        new Order
+                        {
+                            OrderId = 1,
+                            Description = "A test order",
+                            CustomerId = 1
+                        },
+                        new Order
+                        {
+                            OrderId = 2,
+                            CustomerId = 2,
+                            Description = "A second test order"
+                        }
+            );
     }
 
          public DbSet<Customer> Customers { get; set; }
+         public DbSet<Order> Orders { get; set; }
      }
 }
