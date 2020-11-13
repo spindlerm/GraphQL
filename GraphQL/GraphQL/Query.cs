@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using HotChocolate;
+
 using HotChocolate.Types;
 using GraphQL.Data;
 using GraphQL.Models;
@@ -11,16 +12,20 @@ namespace GraphQL.GraphQL
     public class Query
     {
         [UsePaging]
+        [UseSelection]
+        [UseFiltering]
+        [UseSorting]
         public IQueryable<Customer> GetCustomers([Service] ApplicationDbContext context) =>
-             context.Customers.Include(o=> o.Orders);
+            // context.Customers.Include(o=> o.Orders);
 
+              context.Customers;
 
-         public  Customer Customer(int  id, [Service] ApplicationDbContext context)
+        [UseFirstOrDefault]
+        [UseSelection]
+         public  IQueryable<Customer> Customer(int  id, [Service] ApplicationDbContext context)
         {
             var result =  context.Customers
-                        .Where(c=> c.CustomerId == id)
-                        .Include(c => c.Orders)
-                        .FirstOrDefault();
+                        .Where(c=> c.CustomerId == id);
 
              if(result == null)
                 throw new CustomerNotFoundException() { CustomerId = id};
@@ -29,16 +34,19 @@ namespace GraphQL.GraphQL
         }
 
         [UsePaging]
+        [UseSelection]
+        [UseFiltering]
+        [UseSorting]
         public IQueryable<Order> GetOrders([Service] ApplicationDbContext context) =>
-             context.Orders.Include(o=> o.Customer);
+             context.Orders;
 
 
-        public  Order Order(int  id, [Service] ApplicationDbContext context)
+        [UseFirstOrDefault]
+        [UseSelection]        
+        public  IQueryable<Order> Order(int  id, [Service] ApplicationDbContext context)
         {
             var result =  context.Orders
-                        .Where(o=> o.OrderId == id)
-                        .Include(o => o.Customer)
-                        .FirstOrDefault();
+                        .Where(o=> o.OrderId == id);
 
              if(result == null)
                 throw new OrderNotFoundException() { OrderId = id};

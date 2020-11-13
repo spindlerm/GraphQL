@@ -35,8 +35,8 @@ namespace GraphQL
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql("Server=192.168.1.253;Database=graphqldemo;User Id=dbuser1;Password=dbuser1;Port=5432;"));
-        
+            services.AddPooledDbContextFactory<ApplicationDbContext>(options => options.UseNpgsql("Server=192.168.1.253;Database=graphqldemo;User Id=dbuser1;Password=dbuser1;Port=5432;"));
+
             services.AddGraphQLServer()
             .AddType<Customer>()
             .AddType<Order>()
